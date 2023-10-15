@@ -1,4 +1,4 @@
-#Reading the DataFile which contains significant earthquakes - the past month:
+//Reading the DataFile which contains significant earthquakes - the past month:
 var queryURL="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 // Perform a GET request to the query URL/
 d3.json(queryUrl).then(function (data) {
