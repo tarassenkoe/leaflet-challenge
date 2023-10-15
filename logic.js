@@ -1,5 +1,5 @@
 #Reading the DataFile which contains significant earthquakes - the past month:
-var queryURL="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson"
+var queryURL="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 // Perform a GET request to the query URL/
 d3.json(queryUrl).then(function (data) {
   // Sending data.features object to the createFeatures function.
@@ -7,9 +7,9 @@ d3.json(queryUrl).then(function (data) {
 });
 function createFeatures(earthquakeData) {
   // Define a function that we want to run once for each feature in the features array.
-  // Give each feature a popup that describes the place and time of the earthquake.
+  // Give each feature a popup that describes the latitue and longitude of the earthquake for each earthquake in the past 7 days:
   function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>${feature.properties.latitude}</h3><hr><p>${feature.properties.longitude)}</p>`);
+    layer.bindPopup(`<h3>${feature.properties.geometry.coordinates[0]}</h3><h3>${feature.properties.geometry.coordinates[1])}</h3>`);
   }
 
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
@@ -21,6 +21,15 @@ function createFeatures(earthquakeData) {
   // Send our earthquakes layer to the createMap function/
   createMap(earthquakes);
 }
+
+//Create the markers by Magnitude (ASSUME COORDINATE 1) and Depth (Coordinate 3):
+var MagnitudeMarkers=[] 
+var DepthMarkers=[]
+for (var i=0,i<eathquakes.length,i++)
+{MagnitudeMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[0], 
+{stroke:false, fillOpacity: 0.75, color: "white", fillcolor: "white", radius: markerSize(earthquakes[i].properties.geometry.coordinates[0])}))};
+{DepthMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[2],
+{stroke:false, fillOpacity: 0.75, color: "purple", fillColor: "purple", radius: markerSize(earthquakes[i].properties.geometry.coordinates[2])}))};
 
 function createMap(earthquakes) {
 
