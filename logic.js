@@ -1,7 +1,7 @@
 //Reading the DataFile which contains significant earthquakes - the past month:
 var queryURL="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 // Perform a GET request to the query URL/
-d3.json(queryUrl).then(function (data) {
+d3.json(queryURL).then(function (data) {
   // Sending data.features object to the createFeatures function.
   createFeatures(data.features);
 });
@@ -9,7 +9,7 @@ function createFeatures(earthquakeData) {
   // Define a function that we want to run once for each feature in the features array.
   // Give each feature a popup that describes the latitue and longitude of the earthquake for each earthquake in the past 7 days:
   function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>${feature.properties.geometry.coordinates[0]}</h3><h3>${feature.properties.geometry.coordinates[1])}</h3>`);
+    layer.bindPopup(`<h3>${feature.properties.geometry.coordinates[0]}</h3><h3>${feature.properties.geometry.coordinates[1]}</h3>`);
   }
 
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
@@ -19,7 +19,7 @@ function createFeatures(earthquakeData) {
   });
 
   // Send our earthquakes layer to the createMap function/
-  createMap(earthquakes);
+  createMap();
 }
 
 //Create the markers by Magnitude (ASSUME COORDINATE 1) and Depth (Coordinate 3):
