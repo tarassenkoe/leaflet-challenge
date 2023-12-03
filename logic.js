@@ -1,13 +1,15 @@
-//Reading the DataFile which contains significant earthquakes - the past month:
-var queryURL="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+// Reading the DataFile which contains significant earthquakes - the past month:
+var queryURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+
 // Perform a GET request to the query URL/
-d3.json(queryURL).then(function (data) {
+d3.json(queryURL).then(function(data) {
   // Sending data.features object to the createFeatures function.
   createFeatures(data.features);
 });
+
 function createFeatures(earthquakeData) {
   // Define a function that we want to run once for each feature in the features array.
-  // Give each feature a popup that describes the latitue and longitude of the earthquake for each earthquake in the past 7 days:
+  // Give each feature a popup that describes the latitude and longitude of the earthquake for each earthquake in the past 7 days.
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>${feature.properties.geometry.coordinates[0]}</h3><h3>${feature.properties.geometry.coordinates[1]}</h3>`);
   }
@@ -18,28 +20,40 @@ function createFeatures(earthquakeData) {
     onEachFeature: onEachFeature
   });
 
-  // Send our earthquakes layer to the createMap function/
-  createMap();
+  // Send our earthquakes layer to the createMap function.
+  createMap(earthquakes);
 }
 
-//Create the markers by Magnitude (ASSUME COORDINATE 1) and Depth (Coordinate 3):
-var MagnitudeMarkers=[] 
-var DepthMarkers=[]
-for (var i=0,i<eathquakes.length,i++)
-{MagnitudeMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[0], 
-{stroke:false, fillOpacity: 0.75, color: "white", fillcolor: "white", radius: markerSize(earthquakes[i].properties.geometry.coordinates[0])}))};
-{DepthMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[2],
-{stroke:false, fillOpacity: 0.75, color: "purple", fillColor: "purple", radius: markerSize(earthquakes[i].properties.geometry.coordinates[2])}))};
+// Create the markers by Magnitude (ASSUME COORDINATE 1) and Depth (Coordinate 3):
+var MagnitudeMarkers = [];
+var DepthMarkers = [];
+
+for (var i = 0; i < earthquakes.length; i++) {
+  MagnitudeMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[0], {
+    stroke: false,
+    fillOpacity: 0.75,
+    color: "white",
+    fillColor: "white",
+    radius: markerSize(earthquakes[i].properties.geometry.coordinates[0])
+  }));
+
+  DepthMarkers.push(L.circle(earthquakes[i].properties.geometry.coordinates[2], {
+    stroke: false,
+    fillOpacity: 0.75,
+    color: "purple",
+    fillColor: "purple",
+    radius: markerSize(earthquakes[i].properties.geometry.coordinates[2])
+  }));
+}
 
 function createMap(earthquakes) {
-
   // Create the base layers.
   var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  })
+  });
 
   var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
   });
 
   // Create a baseMaps object.
@@ -68,6 +82,4 @@ function createMap(earthquakes) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
-
-}
-                                        
+}                       
